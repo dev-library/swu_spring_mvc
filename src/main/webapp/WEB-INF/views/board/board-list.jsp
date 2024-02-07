@@ -8,5 +8,6 @@
 </head>
 <body>
     <h1>게시판 글 목록 입니다.</h1>
+    게시글 목록 : ${boardList}
 </body>
 </html>
