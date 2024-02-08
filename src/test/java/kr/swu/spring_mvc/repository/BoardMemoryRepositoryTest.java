@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,7 +81,30 @@ public class BoardMemoryRepositoryTest {
     }
 
     // save 로직에 대해서 테스트코드를 임의로 작성해보세요.
+    @Test
+    @DisplayName("4번 글을 저장한 다음, 4번 글을 얻어오면 입력한 정보가 조회됨")
+    public void saveTest(){
+        // given
+        // 글번호를 제외한 나머지를 미리 변수에 저장해 둡니다.
+        final String WRITER = "인프라개발자";
+        final LocalDateTime NOW = LocalDateTime.now();
+        final String CONTENT = "퍼블릭클라우드하고싶다~~~~~~";
+        final int BOARD_NUM = 4;
+        // boardNum은 어차피 save도중 ++sequence에 의해 보정되므로 0으로 넣어도 무방
+        Board board = new Board(BOARD_NUM, WRITER, NOW, CONTENT);
 
+        // when : 구현해놓은 .save()가 실제로 동작하는지 검증
+        // 저장로직을 돌린다음, 실제로 저장되었는지 확인을 해야함
+        boardRepository.save(board);
+        Board result = boardRepository.findBoardByBoardNum(BOARD_NUM);
+        int boardListSize = boardRepository.getBoardList().size();
+
+        // then
+        // 개수는 4개, 4번글을 가져왔을때 위에 given에 정의한 데이터가 그대로 나와야함.
+        assertEquals(4, boardListSize);
+        assertEquals(WRITER, result.getWriter());
+        assertEquals(CONTENT, result.getContent());
+    }
 
 
 
